@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "connector-starter"
+version = "0.1.0"
+description = "A starter project for the connector development with the UniteLabs Connector Framework."
+license = "MIT"
+authors = ["UniteLabs AG <developers+connector@unitelabs.ch>"]
+readme = "README.md"
+packages = [{ include = "connector", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+unitelabs-cdk = {version = "0.2.2", source = "unitelabs"}
+
+[tool.poetry.group.dev.dependencies]
+black = "23.3.0"
+cryptography = "41.0.2"
+isort = "5.12.0"
+pylint = "2.17.4"
+pytest = "7.3.1"
+pytest-asyncio = "0.21.0"
+pytest-cov = "4.1.0"
+
+[[tool.poetry.source]]
+name = "unitelabs"
+url = "https://gitlab.com/api/v4/groups/1009252/-/packages/pypi/simple"
+priority = "supplemental"
+
+[tool.black]
+line-length = 120
+target-version = ['py39']
+
+[tool.isort]
+line_length = 120
+profile = "black"
+
+[tool.pylint.format]
+max-line-length = "120"
+
+[tool.pylint.messages_control]
+disable = ["missing-module-docstring"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

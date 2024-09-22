@@ -1,0 +1,115 @@
+stages:
+  - build
+  - test
+  - release
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+    - .venv/
+
+.standard-rules:
+  image: python:3.9.18-slim-bullseye
+  before_script:
+    - pip install poetry
+    - poetry config virtualenvs.in-project true
+    - poetry install
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+.docker:
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+compile:
+  stage: build
+  extends:
+    - .standard-rules
+  script:
+    - poetry build
+  artifacts:
+    paths:
+      - "dist/"
+
+build:
+  stage: build
+  extends:
+    - .docker
+  script:
+    - docker buildx create --use
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - >
+      docker buildx build
+      --pull
+      --cache-from $CI_REGISTRY_IMAGE:latest
+      --platform linux/amd64,linux/arm64/v8
+      --label "org.opencontainers.image.title=$CI_PROJECT_TITLE"
+      --label "org.opencontainers.image.url=$CI_PROJECT_URL"
+      --label "org.opencontainers.image.created=$CI_JOB_STARTED_AT"
+      --label "org.opencontainers.image.revision=$CI_COMMIT_SHA"
+      --label "org.opencontainers.image.version=$CI_COMMIT_REF_NAME"
+      --tag $CI_REGISTRY_IMAGE:latest
+      --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+      --push
+      .
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+format:
+  stage: test
+  extends:
+    - .standard-rules
+  script:
+    - poetry run black --check src
+
+lint:
+  stage: test
+  extends:
+    - .standard-rules
+  script:
+    - poetry run pylint --disable C,R src
+
+# test:
+#   stage: test
+#   extends:
+#     - .standard-rules
+#   script:
+#     - poetry run pytest --cov=src --cov-report=term --cov-report=xml
+#   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+#   artifacts:
+#     reports:
+#       coverage_report:
+#         coverage_format: cobertura
+#         path: coverage.xml
+
+deliver:
+  stage: release
+  variables:
+    GIT_STRATEGY: none
+  extends:
+    - .docker
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+    - docker tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+  rules:
+    - if: $CI_COMMIT_TAG
+
+release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  script:
+    - echo "release job"
+  release:
+    tag_name: "$CI_COMMIT_TAG"
+    description: "$CI_COMMIT_TAG"
+  rules:
+    - if: $CI_COMMIT_TAG
