@@ -16,6 +16,10 @@ Install poetry by running the following code in your terminal (MacOS) or command
 
 `$ curl -sSL https://install.python-poetry.org | python3 -`
 
+On Mac, create a .zshrc file in the home folder with the following:
+
+`$ export PATH="$HOME/.local/bin:$PATH"`
+
 Check your poetry installation by running:
 
 ```commandline
@@ -28,7 +32,7 @@ Poetry (version 1.3.1)
 You can clone, install, and start the project with:
 
 ``` terminal
-$ git clone https://github.com/Alpaca233/sila2_test
+$ git clone https://github.com/Alpaca233/squid-sila2
 $ cd sila2_test
 $ poetry install
 ```
@@ -37,7 +41,7 @@ To use the connector, environment variables need to be set. This can be done by 
 Here are some standard variables that can be used for local testing in the [UniteLabs SiLA Browser](https://gitlab.com/unitelabs/integrations/sila2/sila-browser):
 
 ``` .env
-SILA_SERVER__NAME="BlueSens"
+SILA_SERVER__NAME="Squid"
 CLOUD_SERVER_ENDPOINT__ENDPOINT = localhost:5000
 CLOUD_SERVER_ENDPOINT__SECURE = True
 SILA_SERVER__UUID = <Your generated uuid4>
