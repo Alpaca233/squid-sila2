@@ -1,3 +1,4 @@
-from .stage_controller_base import StageControllerBase
+from .microscope_service_base import MicroscopeServiceBase
+from .microscope_service import MicroscopeService
 
-__all__ = ["StageControllerBase"]
+__all__ = ["MicroscopeServiceBase", "MicroscopeService"]

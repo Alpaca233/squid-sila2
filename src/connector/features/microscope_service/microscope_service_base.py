@@ -18,20 +18,19 @@ class MicroscopeServiceBase(sila.Feature, metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     @sila.UnobservableProperty()
-    async def get_stage_position_once(self) -> str:
+    async def get_stage_position(self) -> str:
         """
         Retrieve the position of the stage once.
+        .. return: coordinates as a string
         """
 
-    @abc.abstractmethod
-    @sila.UnobservableCommand()
-    @sila.Response(name="Result")
-    async def perform_scanning(self) -> bool:
-        """
-        Start scanning at current position.
-
-        .. return:: execution result
-        """
+#    @abc.abstractmethod
+#    @sila.UnobservableProperty()
+#    async def get_device_status(self) -> int:
+#        """
+#        Retrieve the status of the microscope once.
+#        .. return: 0: ready; 1: moving to loading postion; 2: scanning; 3: robotic arm moving
+#        """
 
     @abc.abstractmethod
     @sila.UnobservableCommand()
@@ -40,15 +39,36 @@ class MicroscopeServiceBase(sila.Feature, metaclass=abc.ABCMeta):
         """
         Move stage to loading position.
 
-        .. return:: execution result
+        .. return:: execution result. True: successful; False: failed
+        """
+
+    @abc.abstractmethod
+    @sila.ObservableCommand()
+    @sila.IntermediateResponse(name="Process status")
+    @sila.Response(name="Execution result")
+    async def perform_scanning(self, *, status: sila.Status, intermediate: sila.Intermediate[str]) -> bool:   
+        """
+        Start scanning at current position.
+        .. yield:: The current progress of scanning.
+        .. return:: execution result. True: successful; False: failed
+        """
+        
+    @abc.abstractmethod
+    @sila.UnobservableCommand()
+    @sila.Response(name="Result")
+    async def move_plate_to_scope(self) -> bool:
+        """
+        Move plate to stage with robotic arm.
+
+        .. return:: execution result. True: successful; False: failed
         """
 
     @abc.abstractmethod
     @sila.UnobservableCommand()
     @sila.Response(name="Result")
-    async def move_to_scanning_position(self) -> bool:
+    async def remove_plate_from_scope(self) -> bool:
         """
-        Move stage to scanning position.
+        Remove plate from stage with robotic arm.
 
-        .. return:: execution result
+        .. return:: execution result. True: successful; False: failed
         """
