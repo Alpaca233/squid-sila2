@@ -14,17 +14,20 @@ If you run into trouble during the poetry installation process there's a detaile
 
 Install poetry by running the following code in your terminal (MacOS) or command line (Windows):
 
-`$ curl -sSL https://install.python-poetry.org | python3 -`
+```terminal
+curl -sSL https://install.python-poetry.org | python3 -
+```
 
 On Mac, create a .zshrc file in the home folder with the following:
 
-`$ export PATH="$HOME/.local/bin:$PATH"`
+```terminal
+export PATH="$HOME/.local/bin:$PATH"
+```
 
 Check your poetry installation by running:
 
 ```commandline
-$ poetry --version
-Poetry (version 1.3.1)
+poetry --version
 ```
 
 ### Start project
@@ -32,9 +35,9 @@ Poetry (version 1.3.1)
 You can clone, install, and start the project with:
 
 ``` terminal
-$ git clone https://github.com/Alpaca233/squid-sila2
-$ cd sila2_test
-$ poetry install
+git clone https://github.com/Alpaca233/squid-sila2
+cd sila2_test
+poetry install
 ```
 
 To use the connector, environment variables need to be set. This can be done by adding a .env file in the root directory.
@@ -55,5 +58,5 @@ the server-initiated cloud connectivity, enter the cloud endpoint of your client
 After setting up the environment, you can start the connector by running
 
 ``` terminal
-$ poetry run connector start
+poetry run connector start
 ```
