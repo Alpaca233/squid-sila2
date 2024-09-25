@@ -22,8 +22,3 @@ class MicroscopeService(MicroscopeServiceBase):
     async def perform_scanning(self) -> bool:
         return False
 
-    async def move_plate_to_scope(self) -> bool:
-        return False
-
-    async def remove_plate_from_scope(self) -> bool:
-        return False

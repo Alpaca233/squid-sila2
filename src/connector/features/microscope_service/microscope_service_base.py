@@ -29,7 +29,7 @@ class MicroscopeServiceBase(sila.Feature, metaclass=abc.ABCMeta):
 #    async def get_device_status(self) -> int:
 #        """
 #        Retrieve the status of the microscope once.
-#        .. return: 0: ready; 1: moving to loading postion; 2: scanning; 3: robotic arm moving
+#        .. return: 0: ready; 1: moving to loading postion; 2: scanning
 #        """
 
     @abc.abstractmethod
@@ -52,23 +52,4 @@ class MicroscopeServiceBase(sila.Feature, metaclass=abc.ABCMeta):
         .. yield:: The current progress of scanning.
         .. return:: execution result. True: successful; False: failed
         """
-        
-    @abc.abstractmethod
-    @sila.UnobservableCommand()
-    @sila.Response(name="Result")
-    async def move_plate_to_scope(self) -> bool:
-        """
-        Move plate to stage with robotic arm.
 
-        .. return:: execution result. True: successful; False: failed
-        """
-
-    @abc.abstractmethod
-    @sila.UnobservableCommand()
-    @sila.Response(name="Result")
-    async def remove_plate_from_scope(self) -> bool:
-        """
-        Remove plate from stage with robotic arm.
-
-        .. return:: execution result. True: successful; False: failed
-        """
