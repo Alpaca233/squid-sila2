@@ -1,7 +1,7 @@
 from unitelabs.cdk import Connector
 
 from .features.microscope_service import MicroscopeService
-from .squid import Squid
+from software.control.microscope import Microscope
 
 
 async def create_app():
@@ -11,14 +11,15 @@ async def create_app():
             "sila_server": {
                 "name": "Squid test",
                 "type": "Example",
-                "description": "A UniteLabs SiLA Python Example Server",
+                "description": "A UniteLabs SiLA Python Server for Squid microscope",
                 "version": "0.1.0",
                 "vendor_url": "https://www.cephla.com/",
             }
         }
     )
 
-    scope = Squid()
+    scope = Microscope(is_simulation=False)
+    scope.home_xyz()
 
     app.register(MicroscopeService(microscope=scope))
 
