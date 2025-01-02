@@ -33,3 +33,4 @@ class MicroscopeService(MicroscopeServiceBase):
 
     async def select_wells(self, wellplate_format: str, selection: str, scan_size_mm: float = None, overlap: float = 10) -> bool:
         self.coordinates, self.names = self.microscope.get_scan_coordinates_from_selected_wells(wellplate_format, selection, scan_size_mm, overlap)
+        return True
