@@ -27,10 +27,14 @@ class MicroscopeService(MicroscopeServiceBase):
         self.microscope.to_loading_position()
         return True
 
-    async def perform_scanning(self, path: str, z_pos_um: float) -> bool:
-        self.microscope.perform_scanning(path, z_pos_um, self.coordinates, self.names)
+    async def move_to(self, x_mm: float, y_mm: float, z_um: float) -> bool:
+        self.microscope.move_to_position(x, y, z_um / 1000)
         return True
 
     async def select_wells(self, wellplate_format: str, selection: str, scan_size_mm: float = None, overlap: float = 10) -> bool:
         self.coordinates, self.names = self.microscope.get_scan_coordinates_from_selected_wells(wellplate_format, selection, scan_size_mm, overlap)
+        return True
+
+    async def perform_scanning(self, path: str, z_pos_um: float, channels: str = '0') -> bool:
+        self.microscope.perform_scanning(path, z_pos_um, channels.split(','), self.coordinates, self.names)
         return True
