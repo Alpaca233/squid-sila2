@@ -36,9 +36,10 @@ You can clone, install, and start the project with:
 
 ``` terminal
 git clone https://github.com/Alpaca233/squid-sila2
-cd sila2_test
+cd squid_sila2
 poetry install
 ```
+Copy `/software` folder from https://github.com/Alpaca233/octopi-research/tree/api-for-sila2 to `squid_sila2/src`
 
 To use the connector, environment variables need to be set. This can be done by adding a .env file in the root directory.
 Here are some standard variables that can be used for local testing in the [UniteLabs SiLA Browser](https://gitlab.com/unitelabs/integrations/sila2/sila-browser):
