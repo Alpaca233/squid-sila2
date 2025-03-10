@@ -1,6 +1,6 @@
 from .microscope_service_base import MicroscopeServiceBase
-from software.control.microscope import Microscope
-import software.control.utils as utils
+from control.microscope import Microscope
+import control.utils as utils
 import numpy as np
 import pandas as pd
 import time
@@ -50,7 +50,7 @@ class MicroscopeService(MicroscopeServiceBase):
         return True
 
     async def select_wells_to_scan(self, wellplate_format: str, selection: str, scan_size_mm: float = None, overlap: float = 10) -> bool:
-        self.coordinates, self.names = self.microscope.set_coordinates(wellplate_format, selection, scan_size_mm, overlap)
+        self.microscope.set_coordinates(wellplate_format, selection, scan_size_mm, overlap)
         return True
 
     async def perform_scanning(self, path: str, experiment_ID: str, z_pos_um: float, channels: str = '0', use_laser_af: bool = True) -> bool:

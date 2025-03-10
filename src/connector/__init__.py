@@ -1,7 +1,10 @@
+import sys
+sys.path.append("src/squid/software")
+
 from unitelabs.cdk import Connector
 
 from .features.microscope_service import MicroscopeService
-from software.control.microscope import Microscope
+from control.microscope import Microscope
 
 
 async def create_app():
@@ -18,7 +21,7 @@ async def create_app():
         }
     )
 
-    scope = Microscope(is_simulation=False)
+    scope = Microscope(is_simulation=True)
     scope.home_xyz()
 
     app.register(MicroscopeService(microscope=scope))
