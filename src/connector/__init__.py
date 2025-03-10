@@ -21,7 +21,7 @@ async def create_app():
         }
     )
 
-    scope = Microscope(is_simulation=True)
+    scope = Microscope(is_simulation=False)
     scope.home_xyz()
 
     app.register(MicroscopeService(microscope=scope))
