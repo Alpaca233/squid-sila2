@@ -4,6 +4,12 @@
 
 To get started quickly, you need to install the [UniteLabs Connector Framework](https://gitlab.com/unitelabs/connector-framework).
 Make sure the pyproject.toml points to the correct installation folder of your UniteLabs Framework installation.
+### Install Squid submodule
+The repo includes a submodule for the Squid microscope software. After cloning this repo, do
+
+```terminal
+git submodule update --init
+```
 
 ### Set up Poetry
 
@@ -32,14 +38,28 @@ poetry --version
 
 ### Start project
 
-You can clone, install, and start the project with:
+The repo includes a submodule for the Squid microscope software. You can clone the project with:
 
 ``` terminal
 git clone https://github.com/Alpaca233/squid-sila2
+git submodule update --init
+```
+The Squid microscope software will be cloned in `squid_sila2/src/squid` directory. We'll need to move a few folders to `squid_sila2` directory for it to work:
+
+```terminal
 cd squid_sila2
+mkdir cache
+cp -r ./src/squid/software/images .
+cp -r "./src/squid/software/drivers and libraries" .
+cp -r ./src/squid/software/objective_and_sample_formats .
+```
+You will also need to copy your microscope configuration file (`configuration*.ini` file), and optionally, the `acquisition_configurations` folder to `squid_sila2` directory if you want to use saved laser autofocus and channel configuration settings (it will be created automatically if not provided). 
+
+After this, run the following to start the project:
+
+``` terminal
 poetry install
 ```
-Copy `/software` folder from https://github.com/Alpaca233/octopi-research/tree/api-for-sila2 to `squid_sila2/src`
 
 To use the connector, environment variables need to be set. This can be done by adding a .env file in the root directory.
 Here are some standard variables that can be used for local testing in the [UniteLabs SiLA Browser](https://gitlab.com/unitelabs/integrations/sila2/sila-browser):
@@ -52,6 +72,7 @@ SILA_SERVER__UUID = <Your generated uuid4>
 SILA_SERVER__HOST = 0.0.0.0
 SILA_SERVER__PORT = 50001
 ```
+Change `CLOUD_SERVER_ENDPOINT__ENDPOINT` to your IP address as needed.
 You can generate a uuid4 quickly with this online [generator](https://www.uuidgenerator.net/version4). If you're using 
 the server-initiated cloud connectivity, enter the cloud endpoint of your client application.
 
@@ -61,3 +82,5 @@ After setting up the environment, you can start the connector by running
 ``` terminal
 poetry run connector start
 ```
+### Test with SiLA Browser
+https://gitlab.com/unitelabs/sila2/sila-browser
