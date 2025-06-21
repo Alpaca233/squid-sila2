@@ -25,6 +25,7 @@ torch = "^2.5.1"
 gitpython = "^3.1.44"
 pydantic = "^2.10.6"
 pydantic-xml = "^2.14.2"
+tifffile = "<2025.6.11"
 
 [tool.poetry.group.dev.dependencies]
 black = "23.3.0"
